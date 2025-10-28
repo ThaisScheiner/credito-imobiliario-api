@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-credito-imobiliario
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword # mesma senha do application.yml
+      MYSQL_DATABASE: credito_imobiliario_db # mesmo banco do application.yml
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

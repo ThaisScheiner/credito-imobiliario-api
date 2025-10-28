@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # Serviço 1: Zookeeper (o Kafka depende dele)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  # Serviço 2: Kafka Broker
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: kafka
+    hostname: kafka
+    ports:
+      # Porta para comunicação interna no Docker (ex: de outro container)
+      - "9092:9092"
+      # Porta para comunicação externa (da nossa máquina para o container)
+      - "29092:29092"
+    depends_on:
+      - zookeeper  # Garante que o Zookeeper inicie antes do Kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      # Configuração de rede crucial para o Kafka funcionar com Docker:
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      # Usando a porta 8088 para não conflitar com a porta 8080 da sua API
+      - "8088:8080"
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-kafka
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
