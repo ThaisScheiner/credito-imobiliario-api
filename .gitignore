@@ -1,0 +1,57 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Build files
+/target/
+!/target/classes/application.yml
+!/target/classes/application.properties
+
+# Log files
+*.log
+
+# IDE files (IntelliJ)
+.idea/
+*.iml
+*.iws
+
+# Maven
+.mvn/
+dependency-reduced-pom.xml
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Datadog Agent (não deve ser versionado)
+datadog/
+
+# Outros
+*.DS_Store
+*~
+*.swp
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
