@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+# ATIVANDO VIRTUAL THREADS DO JAVA 21
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+  application:
+    name: simulacao-service
+
+  # Configuração de conexão com o Banco de Dados
+  datasource:
+    url: jdbc:mysql://localhost:3306/credito_imobiliario_db?createDatabaseIfNotExist=true
+    username: root
+    password: mysecretpassword # A mesma senha no Docker Compose
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Configuração do JPA e Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: update # Cria/atualiza o schema do banco ao iniciar a aplicação
+    show-sql: true # Mostra os comandos SQL gerados no console
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:29092
+
+app:
+  kafka:
+    topic-name: "credito-imobiliario.simulacoes.realizadas"
